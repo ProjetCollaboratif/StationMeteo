@@ -1,0 +1,245 @@
+<div class="container">
+  <div class="header_part">
+    <div class="row justify-content-between">
+      <div class="col-sm-12 col-md-4">
+        <h1>Bonjour</h1>
+      </div>
+
+      <div class="col-4 col-sm-4 col-md-3">
+        <!-- <img src="../../assets/user.svg"></img> -->
+        <label>Utilisateur: </label>
+        <select
+          class="form-select form-select-sm"
+          (change)="selectUser($event)"
+        >
+          <option
+            [selected]="userOptionSelectDefault"
+            *ngFor="let user of users; let i = index"
+            [value]="users[i].IDUser"
+          >
+            {{ users[i].Nomcomplet }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <br />
+  <br />
+
+  <div class="row">
+    <div class="col">
+      <h3>Sondes</h3>
+
+      <div id="data-grid">
+        <dx-data-grid [dataSource]="user" [showBorders]="true">
+          <dxo-paging [enabled]="false"></dxo-paging>
+
+          <dxi-column dataField="model" caption="Position"></dxi-column>
+          <dxi-column type="buttons" [width]="100">
+            <dxi-button
+              hint="Détails"
+              text="Détails"
+              [visible]="true"
+              [onClick]="selectSonde"
+            >
+            </dxi-button>
+          </dxi-column>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+  <br /><br />
+
+  <div *ngIf="isSondeSelected">
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <!-- Relevé le plus récent de la Sonde -->
+        <div
+          class="row text-center"
+          *ngFor="let sonde of sondeSelectionneeActuellement; let i = index"
+        >
+          <div class="card card-block d-flex mb-3">
+            <h3 class="card-title">
+              Sonde {{ sondeSelectionneeActuellement[i].IdSonde }} Actuellement:
+            </h3>
+            <br />
+            <div
+              class="
+                pictogramme
+                card-body
+                align-items-center
+                justify-content-center
+              "
+              style="width: 100px"
+            >
+              <!-- Affiche un pictogramme meteo correspondant au temps du dernier relevé de la sonde séléctionnée  -->
+              <div
+                *ngIf="sondeSelectionneeActuellement[i].Temps === 'Ensoleille'"
+              >
+                <img class="card-img-top" src="../../assets/day.svg" />
+              </div>
+              <div *ngIf="sondeSelectionneeActuellement[i].Temps === 'Nuageux'">
+                <img style="width:30px" src="../../assets/cloudy.svg" />
+              </div>
+              <div
+                *ngIf="sondeSelectionneeActuellement[i].Temps === 'Pluvieux'"
+              >
+                <img style="width:30px" src="../../assets/rainy-4.svg" />
+              </div>
+              <div *ngIf="sondeSelectionneeActuellement[i].Temps === 'Orageux'">
+                <img style="width:30px" src="../../assets/thunder.svg" />
+              </div>
+            </div>
+            <br />
+            <p>{{ sondeSelectionneeActuellement[i].Temperature }} °C</p>
+            <br />
+            <p>Humidité : {{ sondeSelectionneeActuellement[i].Humidite }} %</p>
+          </div>
+        </div>
+
+        <!-- Ici relevés sonde sous format de grid -->
+        <div class="row">
+          <div id="data-grid">
+            <dx-data-grid [dataSource]="sondeSelectionnee" [showBorders]="true">
+              <dxo-paging [enabled]="false"></dxo-paging>
+
+              <dxi-column alignment="center" dataField="Date" caption="Date"></dxi-column>
+              <dxi-column
+              alignment="center"
+                dataField="Temperature"
+                caption="Temperature"
+              ></dxi-column>
+              <dxi-column alignment="center" dataField="Humidite" caption="Humidite"></dxi-column>
+              <dxi-column
+                dataField="Temps"
+                caption="Temps"
+                cellTemplate="cellTemplate"
+              >
+                <div *dxTemplate="let data of 'cellTemplate'">
+                  <div *ngIf="data.value === 'Ensoleille'">
+                    <img class="card-img-top" src="../../assets/day.svg" />
+                  </div>
+                  <div *ngIf="data.value === 'Nuageux'">
+                    <img src="../../assets/cloudy.svg" />
+                  </div>
+                  <div *ngIf="data.value === 'Pluvieux'">
+                    <img src="../../assets/rainy-4.svg" />
+                  </div>
+                  <div *ngIf="data.value === 'Orageux'">
+                    <img src="../../assets/thunder.svg" />
+                  </div>
+                </div>
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
+
+        <br />
+        <br />
+      </div>
+
+      
+        <!-- Ici Relevés sous format de Chart -->
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <dx-chart
+            id="chart"
+            palette="vintage"
+            [dataSource]="sondeSelectionnee"
+            title="Releves"
+          >
+            <dxi-series
+              valueField="Temperature"
+              name="Température"
+              color="#e8560d"
+            ></dxi-series>
+            <dxi-series
+              valueField="Humidite"
+              name="Humidité"
+              color="#75b8ef"
+            ></dxi-series>
+
+            <dxo-common-series-settings argumentField="Date" type="line">
+            </dxo-common-series-settings>
+
+            <dxo-argument-axis
+              name="Date"
+              [inverted]="true"
+              valueType="datetime"
+            >
+              <dxo-title text="Date"> </dxo-title>
+            </dxo-argument-axis>
+
+            <dxi-value-axis
+              name="Temperature"
+              position="left"
+              type="continuous"
+              valueType="numeric"
+              allowDecimal="false"
+              [showZero]="true"
+            >
+              <dxo-grid [visible]="true"></dxo-grid>
+              <dxo-title text="Temperature"></dxo-title>
+            </dxi-value-axis>
+
+            <dxi-value-axis
+              name="Humidite"
+              position="right"
+              type="continuous"
+              valueType="numeric"
+              allowDecimal="false"
+              [showZero]="true"
+            >
+              <dxo-grid [visible]="true"></dxo-grid>
+              <dxo-title text="Humidité"></dxo-title>
+            </dxi-value-axis>
+
+            <dxo-tooltip [enabled]="true">
+              <dxo-format type="largeNumber" [precision]="1"></dxo-format>
+            </dxo-tooltip>
+            <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center">
+            </dxo-legend>
+          </dx-chart>
+        </div>
+      
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-4">
+          <!-- <dx-button> Partager </dx-button> -->
+
+          <div class="modal-body text-center">
+            <!-- Add font awesome icons -->
+            <!-- <share-buttons show="11"></share-buttons> -->
+
+              <h4>Partager la météo actuelle:</h4>
+              <a href="mailto:?subject=&body=:%20"
+              target="_blank" title="Email" (click)="sharemailUrl()">
+              <img src="http://png-2.findicons.com/files/icons/573/must_have/48/mail.png">
+              </a>
+            
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <dx-map
+            #map
+            center="Bordeaux"
+            [zoom]="11"
+            [height]="400"
+            width="100%"
+            provider="bing"
+            [markerIconSrc]="mapMarkerUrl"
+            [markers]="markersData"
+            
+          >
+          </dx-map>
+        </div>
+
+        
+      </div>
+    
+  </div>
+</div>
