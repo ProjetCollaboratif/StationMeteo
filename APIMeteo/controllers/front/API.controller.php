@@ -22,7 +22,6 @@
         public function getUser($user_sonde){
             $sonde = $this->apimanager->getBDSonde($user_sonde);
             Model::sendJSON($sonde);
-         
         }
         public function formatDataLigneSonde($ligneSonde){
          $tabsonde = [];
@@ -97,4 +96,31 @@
             Model::sendJSON($sondes);
         }
         
+
+        // DELETE 
+        public function deleteUser($IDUser){
+            $users = $this->apimanager->deleteBDUser($IDUser);
+            Model::sendJSON($users);
+        }
+        public function deleteSonde($IDSonde){
+            $sondes = $this->apimanager->deleteBDSonde($IDSonde);
+            Model::sendJSON($sondes);
+        }
+        public function deleteReleve($IDReleve){
+            $releves = $this->apimanager->deleteBDReleve($IDReleve);
+            Model::sendJSON($releves);
+        }
+
+        // CREATE
+        public function createSonde($model, $IdStation ){
+            $sondes = $this->apimanager->createBDSonde($model, $IdStation );
+            Model::sendJSON($sondes);
+        }
+
+        public function createUser($Nomcomplet ){
+            $users = $this->apimanager->createBDUser($Nomcomplet);
+            Model::sendJSON($users);
+        }
+
+
     }
