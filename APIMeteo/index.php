@@ -21,7 +21,7 @@ try{
                     case "users":$apicontroller -> getUsers();
                     break;
                     case "user": 
-                        if(empty($url[2])) throw new Exception ("l'identifiant de l'utilisateur est manquante");
+                        if(empty($url[2])) throw new Exception ("l'identifiant de l'utilisateur est manquant");
                         $apicontroller -> getUser($url[2]);
                     break;
                     case "sondes":$apicontroller -> getSondes();
@@ -29,18 +29,44 @@ try{
                     case "releves": $apicontroller -> getReleve();
                     break;
                     case "dernierReleve":
-                        if(empty($url[2])) throw new Exception ("l'identifiant de la sonde est manquante");
+                        if(empty($url[2])) throw new Exception ("l'identifiant de la sonde est manquant");
                         $apicontroller -> getDernierReleve($url[2]);
                     break;
                     case "derniersReleves": $apicontroller -> getDerniersReleves();
                     break;
                     case "sonde": 
-                        if(empty($url[2])) throw new Exception ("l'identifiant de la Sonde est manquante");
+                        if(empty($url[2])) throw new Exception ("l'identifiant de la Sonde est manquant");
                         $apicontroller -> getReleveUser($url[2]);
                     break;
                     case "stations": $apicontroller -> getStation();
                     break;
+
+                    case "deleteUser": 
+                        if(empty($url[2])) throw new Exception ("l'identifiant de l'utilisateur est manquant");
+                        $apicontroller -> deleteUser($url[2]);
+                    break;
+                    case "deleteSonde": 
+                        if(empty($url[2])) throw new Exception ("l'identifiant de la sonde est manquant");
+                        $apicontroller -> deleteSonde($url[2]);
+                    break;
+                    case "deleteReleve": 
+                        if(empty($url[2])) throw new Exception ("l'identifiant du relevé est manquant");
+                        $apicontroller -> deleteReleve($url[2]);
+                    break;
+
+
+                    case "createSonde": 
+                        if(empty($url[2]) || empty($url[3])) throw new Exception ("les données sont manquantes");
+                        $apicontroller -> createSonde($url[2], $url[3]);
+                    break;
+
+                    case "createUser": 
+                        if(empty($url[2])) throw new Exception ("le nom de l'utilisateur est manquantes");
+                        $apicontroller -> createUser($url[2]);
+                    break;
+
                     default : throw new Exception ("La page n'existe pas 2");
+                    
                 }
             break;
             case "back" : echo "page back end demandée";

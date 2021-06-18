@@ -92,4 +92,104 @@ class APIManager extends Model {
         $stmt->closeCursor();
         return $releve;
     }
+
+    // Espace réservé CRUD pour l'ADMIN avec requêtes POST DELETE PUT
+
+    // DELETE
+    public function deleteBDUser($IDUser){
+
+        // ! Axe d'amélioration : condition
+
+        //  requete get avec id user voir si existe
+        // if()l'id existe pas
+        // "existe pas"
+
+         // if id existe  
+        $req = "DELETE FROM `users` WHERE IDUser =:IDUser";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindParam(':IDUser', $IDUser, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        return "Utilisateur supprimé" . $IDUser ;
+    }
+    public function deleteBDSonde($IDSonde){
+
+        // ! Axe d'amélioration : condition
+
+        //  requete get avec id user voir si existe
+        // if()l'id existe pas
+        // "existe pas"
+
+         // if id existe  
+        $req = "DELETE FROM `sonde` WHERE IDSonde =:IDSonde";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindParam(':IDSonde', $IDSonde, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        return "Sonde supprimé" . $IDSonde ;
+    }
+    public function deleteBDReleve($IDReleve){
+
+        // ! Axe d'amélioration : condition
+
+        //  requete get avec id user voir si existe
+        // if()l'id existe pas
+        // "existe pas"
+
+         // if id existe  
+        $req = "DELETE FROM `releve` WHERE IDReleve =:IDReleve";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindParam(':IDReleve', $IDReleve, PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->closeCursor();
+        return "Relevé supprimé" . $IDReleve ;
+    }
+
+    // CREATE
+    public function createBDSonde($model, $IdStation ){
+        // ! Axe d'amélioration : condition
+
+        //  requete get avec id user voir si existe
+        // if()l'id existe pas
+        // "existe pas"
+
+         // if id existe  
+
+        //  ici station est une variable dans le cas où d'autres stations seraient créées par la suite et laisser le choix à l'administrateur
+
+        $req = "INSERT INTO `sonde`(`model`, `IdStation`) VALUES (:model, :IdStation )";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindParam(':model', $model, PDO::PARAM_STR);
+        $stmt->bindParam(':IdStation', $IdStation , PDO::PARAM_INT);
+        $stmt->execute();
+        $stmt->closeCursor();
+        return "SONDE CREEE :" . $model . " DANS LA STATION NUM ". $IdStation ;
+
+    }
+
+    public function createBDUser($Nomcomplet){
+        // ! Axe d'amélioration : condition
+
+        //  requete get avec id user voir si existe
+        // if()l'id existe pas
+        // "existe pas"
+
+         // if id existe  
+
+        //  ici station est une variable dans le cas où d'autres stations seraient créées par la suite et laisser le choix à l'administrateur
+
+        $req = "INSERT INTO `users`(`Nomcomplet`) VALUES (:Nomcomplet )";
+        $stmt = $this->getBdd()->prepare($req); 
+        $stmt->bindParam(':Nomcomplet', $Nomcomplet, PDO::PARAM_STR);
+        $stmt->execute();
+        $stmt->closeCursor();
+        return "USER CREEE :" . $Nomcomplet ;
+
+    }
+
+
+
+
 }
